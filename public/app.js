@@ -1,30 +1,53 @@
-const socket = io();
-// const socket = io();
+const black = document.getElementById('black');
+const white = document.getElementById('white');
+const board = document.getElementById('board');
+// const style1 = window.getComputedStyle(board);
+// const currentX = parseFloat(style1.getPropertyValue('width')); // number only
+// console.log(currentX);
+board.addEventListener('click', () => board.focus());
 
-const msg = document.getElementById('list')
-const inp = document.getElementById('text-box')
-const btn = document.getElementById('btn-box')
-const form = document.getElementById('formm')
-
-form.addEventListener('submit', (e) => {
+board.addEventListener('keydown', (e) => {
     e.preventDefault()
-    if (inp.value) {
-        // console.log("Message: " + inp.value);
-        socket.emit("chatSent", inp.value)
-        inp.value = ''
+    console.log(e.key);
+    const style = window.getComputedStyle(white);
+    const currentX = parseFloat(style.getPropertyValue('--x')); // number only
+    const currentY = parseFloat(style.getPropertyValue('--y')); // number only
+    // if (currentX <= 83.5 && currentX >= 17) {
+        if (e.key === 'a') {
+            white.style.setProperty('--x', `${currentX - 9.5}%`);
+            console.log(currentX);
+            
+        }
+        else if (e.key === 'd') {
+            white.style.setProperty('--x', `${currentX + 9.5}%`);
+            console.log(currentX);
+            
+        }
+        else if (e.key === 'w') {
+            white.style.setProperty('--y', `${currentY - 10}%`);
+            console.log(currentY);
+            
+        }
+        else if (e.key === 's') {
+            white.style.setProperty('--y', `${currentY + 10}%`);
+            console.log(currentY);
+            
+        }
         
-    }
+    // }
 })
 
-function CreateCrow(msg) {
-    const item = document.createElement('li');
-    item.textContent = msg;
-    list.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
-    
-}
 
-socket.on("chatSent", (msg) => {
-    CreateCrow(msg)
-    
-})
+black.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const style = window.getComputedStyle(black);
+    const currentX = parseFloat(style.getPropertyValue('--x')); // number only
+
+    black.style.setProperty('--x', `${currentX - 10}%`);
+});
+
+white.addEventListener('click', (e) => {
+    e.preventDefault();
+
+});

@@ -6,15 +6,22 @@
     <title>Chat App</title>
     <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="app.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hello World!</h1>
-    <form action="#" id="formm">
-        <input type="text" name="text-box" id="text-box">
-        <input type="submit" id="btn-box">
-    </form>
-    <ul id="list">
+    <div class="back">
+        <img class="board" src="Chess_board_image.png" alt="board" id="board" tabindex="0">
 
-    </ul>
+        <img class="piece black"
+             src="https://img.icons8.com/fluency/48/smurf.png"
+             alt="black king"
+             id="black">
+
+        <img class="piece white"
+             src="https://img.icons8.com/dusk/64/stich--v1.png"
+             alt="white king"
+             id="white">
+    </div>
 </body>
+
 </html>
