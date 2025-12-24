@@ -1,8 +1,10 @@
 let express = require('express');
 let app = express();
 let { createServer } = require('node:http');
+const path = require('node:path');
 let server = createServer(app);
 let { Server } = require("socket.io");
+
 //installed what's necessary
 let io = new Server(server);
 let lastId = 0;
@@ -13,10 +15,10 @@ app.use('/assets',express.static(__dirname + '/assets'));
 //delivery of the files
 // serve static files such as CSS style sheets or game assets that won’t be accessible 
 // directly but need to be accessed by your game
-
-app.get('/',function(req,res){
-    res.sendFile(__dirname+'/index.html');
-});
+app.use('/', express.static(path.join(__dirname, "public")))
+// app.get('/',function(req,res){
+//     res.sendFile(__dirname+'/index.html');
+// });
 //root page
 
 server.listen(4444,function(){ // Listens to port 4444
@@ -25,28 +27,34 @@ server.listen(4444,function(){ // Listens to port 4444
 //server listening
 
 
-io.on("connection", (socket) => {
-    console.log(socket);
-    console.log(`socket ${socket.id} connected`);
-    console.log(lastId);
-    
-    io.on("newPlayer", () => {
-        console.log(`Hello World`);
-        if (lastId == 0) {
-            socket.player = {
-                color: "white"
+    io.on("connection", (socket) => {
+        // console.log(socket);
+        console.log(`socket ${socket.id} connected`);
+        console.log(lastId);
+        socket.on('move', (data) => {
+            // send to everyone INCLUDING sender
+            
+            io.emit('playerMove', data);
+            });
+        socket.on("newPlayer", () => {
+            console.log(`Hello World`);
+            if (lastId === 0) {
+                socket.player = {
+                    color: "white"
+                }
             }
-        }
-        else {
-            socket.player = {
-                color: "black"
-            } 
-        }
-    })
-    // console.log(io);
-    lastId++;
-    
-    socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
+            else {
+                socket.player = {
+                    color: "black"
+                } 
+            }
+            socket.emit('playerAssigned', socket.player);
+            lastId++;
+        })
+        // console.log(io);
+        
+        socket.on('disconnect', () => {
+            console.log('user disconnected');
+            // --lastId;
+    });
+    });
