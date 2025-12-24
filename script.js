@@ -1,29 +1,17 @@
-const express = require('express');
-const app = express();
-const PORT = 4444;
-const path = require('path');
-const { createServer } = require('node:http');
-const server = createServer(app);
-const { Server } = require("socket.io");
-// console.log(Server);
-app.use('/',express.static(path.join(__dirname, 'public')))
-app.use(express.urlencoded( {extended : true}));
-app.get('/', (req, res) => {
-    res.send(req)
-})
-const io = new Server(server);
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io').listen(server);
 
-io.on("connection", (socket) => {
-    console.log(`socket ${socket.id} connected`);
-    // socket.on("chatSent", (msg) => {
-    //     console.log("Message: " + msg);
-    //     io.emit('chatSent', msg);
-    // })
-    socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+app.use('/css',express.static(__dirname + '/css'));
+app.use('/js',express.static(__dirname + '/js'));
+app.use('/assets',express.static(__dirname + '/assets'));
+
+app.get('/',function(req,res){
+    res.sendFile(__dirname+'/index.html');
 });
 
-server.listen(PORT, () => {
-    console.log('http://localhost:' + PORT);
+
+server.listen(4444,function(){ // Listens to port 4444
+    console.log('Listening on '+server.address().port);
 });
