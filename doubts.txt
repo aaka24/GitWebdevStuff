@@ -1,3 +1,0 @@
-socket.on ye on kya hai?
-disconnect and connection -> predefined hai?
-ye on pta kaise lgaya chat ayi?
